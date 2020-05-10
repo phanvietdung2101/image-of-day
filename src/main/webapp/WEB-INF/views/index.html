@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<img id="img-of-the-day">
+<form method="post" th:action="@{/get-comments}">
+    <input type="hidden" name="imageUrl" id="imageUrl">
+    <input type="submit" value="Show comments">
+</form>
+<div class="comment-box" th:each="cmt : ${comments}">
+    <p th:text="${cmt.author}"></p>
+    <p th:text="${cmt.feedback}"></p>
+    <p th:text="${cmt.Rate.point}"></p>
+</div>
+<script>
+    let query = 'https://api.nasa.gov/planetary/apod?api_key=PoDNbeMj8pB1xFu3WSr7M1VDLa7XF84KBCfXYc7W';
+    let request = new XMLHttpRequest();
+    request.open('GET', query);
+    request.onload = function() {
+        if (request.status === 200) {
+            let response = JSON.parse(request.responseText);
+            let url = response.url;
+            document.getElementById('img-of-the-day').setAttribute('src',url);
+            document.getElementById('imageUrl').setAttribute('value',url)
+        }
+    };
+    request.send();
+</script>
+</body>
+</html>
